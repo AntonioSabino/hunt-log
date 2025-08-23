@@ -1,19 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsString, Max, Min } from 'class-validator';
-
-export enum WeaponType {
-  SWORD = 'sword',
-  AXE = 'axe',
-  CLUB = 'club',
-  FIST = 'fist',
-  BOW = 'bow',
-  CROSSBOW = 'crossbow',
-}
-
-export enum Hands {
-  ONE_HANDED = 'one-handed',
-  TWO_HANDED = 'two-handed',
-}
+import { Hands, WeaponType } from '../entities/weapon.entity';
 
 export class CreateWeaponDto {
   @ApiProperty()
