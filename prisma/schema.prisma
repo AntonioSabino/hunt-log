@@ -13,3 +13,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Weapon {
+  id             String             @id @default(cuid())
+  name           String             @unique
+  type           String
+  levelReq       Int                @default(0)
+  atk            Int                @default(0)
+  atkElemental   Int                @default(0)
+  hands          String             @default("one-handed")
+  imbuementSlots Int                @default(0)
+  priceQuotes    WeaponPriceQuote[]
+}
+
+model WeaponPriceQuote {
+  id       String   @id @default(cuid())
+  weaponId String
+  minPrice Float
+  maxPrice Float
+  notedAd  DateTime @default(now())
+
+  weapon Weapon @relation(fields: [weaponId], references: [id])
+
+  @@index([weaponId])
+}
