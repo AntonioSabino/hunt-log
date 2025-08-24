@@ -35,8 +35,8 @@ export class WeaponsController {
   @ApiResponse({ status: 200, description: 'Lista de armas' })
   findAll(@Query('type') type?: string, @Query('q') q?: string) {
     return this.weaponsService.findAll({
-      type: type as Weapon['type'] | undefined,
-      q,
+      type: type?.toLowerCase() as Weapon['type'] | undefined,
+      q: q?.toLowerCase(),
     });
   }
 
