@@ -64,4 +64,8 @@ export class InMemoryWeaponsRepository implements WeaponsRepository {
     this.items = this.items.filter((w) => w.id !== id);
     return Promise.resolve(this.items.length < before);
   }
+
+  async existsByName(name: string): Promise<boolean> {
+    return Promise.resolve(this.items.some((w) => w.name === name));
+  }
 }

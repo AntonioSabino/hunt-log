@@ -21,6 +21,7 @@ export class WeaponsController {
 
   @Post()
   @ApiResponse({ status: 201, description: 'Arma criada' })
+  @ApiResponse({ status: 409, description: 'Conflito: Arma já existe' })
   create(@Body() dto: CreateWeaponDto) {
     return this.weaponsService.create(dto);
   }

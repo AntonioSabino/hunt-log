@@ -17,6 +17,7 @@ export abstract class WeaponsRepository {
     data: UpdateWeaponData,
   ): Promise<Weapon | null>;
   abstract delete(id: Weapon['id']): Promise<boolean>;
+  abstract existsByName(name: string): Promise<boolean>;
 }
 
 export const WEAPONS_REPOSITORY = Symbol('WEAPONS_REPOSITORY');

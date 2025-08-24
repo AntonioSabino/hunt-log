@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Hands, Weapon, WeaponType } from '../entities/weapon.entity';
-import { Weapon as PrismaWeapon } from 'generated/prisma';
+import { Prisma, Weapon as PrismaWeapon } from 'generated/prisma';
 import {
   CreateWeaponData,
   UpdateWeaponData,
@@ -27,11 +27,21 @@ export class PrismaWeaponsRepository implements WeaponsRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateWeaponData): Promise<Weapon> {
-    const weapon = await this.prisma.weapon.create({
-      data,
-    });
+    try {
+      const weapon = await this.prisma.weapon.create({
+        data,
+      });
 
-    return mapRowToEntity(weapon);
+      return mapRowToEntity(weapon);
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        throw new ConflictException('Weapon already exists');
+      }
+      throw e;
+    }
   }
 
   async findAll({ type, q }: FindWeaponsParams): Promise<Weapon[]> {
@@ -84,5 +94,12 @@ export class PrismaWeaponsRepository implements WeaponsRepository {
     } catch {
       return false;
     }
+  }
+
+  async existsByName(name: string): Promise<boolean> {
+    const weapon = await this.prisma.weapon.findUnique({
+      where: { name },
+    });
+    return !!weapon;
   }
 }

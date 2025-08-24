@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWeaponDto } from './dto/create-weapon.dto';
 import { UpdateWeaponDto } from './dto/update-weapon.dto';
 import {
@@ -14,7 +19,12 @@ export class WeaponsService {
     private readonly repo: WeaponsRepository,
   ) {}
 
-  create(dto: CreateWeaponDto) {
+  async create(dto: CreateWeaponDto) {
+    const exists = await this.repo.existsByName(dto.name);
+    if (exists) {
+      throw new ConflictException('Weapon already exists');
+    }
+
     return this.repo.create(dto);
   }
 
