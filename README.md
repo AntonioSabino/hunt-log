@@ -1,98 +1,141 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Hunt Log — API (NestJS + Prisma + Swagger)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend para registrar e consultar **armas**, **spots de hunt** e **logs** de hunts do Tibia, substituindo planilhas por uma API organizada e versionada.  
+Arquitetura com **NestJS**, **Prisma (PostgreSQL)**, **Swagger** e **Repository Pattern**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## ✨ Principais recursos (MVP)
 
-## Description
+- CRUD de **Weapons**.
+- **Swagger UI** em `/docs` com DTOs e exemplos.
+- **Repository Pattern**.
+- Validação e serialização com **class-validator / class-transformer**.
+- Migrations e client com **Prisma**.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+> Próximos módulos (roadmap): `HuntSpots`, `HuntRecommendations`, `HuntSessions`, `Calc (DamageCalculator)`.
 
-## Project setup
+## 🧰 Stack
 
-```bash
-$ npm install
-```
+- **Node.js 20+**, **NestJS 10+**
+- **Prisma 5+**, **PostgreSQL**
+- **class-validator**, **@nestjs/swagger**
+- **helmet**, **cors**
 
-## Compile and run the project
+## ⚙️ Requisitos
+
+- Node 20+
+- npm
+- Docker (opcional para rodar o Postgres)
+
+## 🚀 Início rápido
+
+1. **Clonar** e entrar no projeto:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone github.com/AntonioSabino/hunt-log.git
+cd hunt-log
 ```
 
-## Run tests
+2. **Instalar dependências**:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm i
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+3. **Subir o Postgres** (opcional via Docker):
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+4. **Variáveis de ambiente**: crie `.env` a partir de `.env.example`:
 
-## Resources
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/hunt_log?schema=public"
+PORT=3000
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+5. **Prisma (schema e migrations)**:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+```
 
-## Support
+6. **Rodar em desenvolvimento**:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run start:dev
+# Swagger: http://localhost:3000/docs
+```
 
-## Stay in touch
+## 📚 Endpoints (Weapons)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Criar arma
 
-## License
+`POST /api/v1/weapons`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```json
+{
+  "name": "Spike Sword",
+  "type": "Sword",
+  "levelReq": 0,
+  "atk": 24,
+  "atkElemental": 0,
+  "hands": "One",
+  "imbuementSlots": 2
+}
+```
+
+### Listar armas
+
+`GET /api/v1/weapons`  
+Filtros: `q`, `type`
+
+### Detalhar arma
+
+`GET /api/v1/weapons/:id`
+
+### Atualizar arma
+
+`PUT /api/v1/weapons/:id`
+
+```json
+{ "atk": 26 }
+```
+
+### Remover arma
+
+`DELETE /api/v1/weapons/:id`
+
+## 🧪 Exemplos (cURL)
+
+```bash
+# Criar arma
+curl -X POST http://localhost:3000/api/v1/weapons -H "Content-Type: application/json" -d '{
+  "name": "Spike Sword",
+  "type": "Sword",
+  "levelReq": 0,
+  "atk": 24,
+  "atkElemental": 0,
+  "hands": "one-handed",
+  "imbuementSlots": 2
+}'
+
+# Listar armas
+curl -X GET http://localhost:3000/api/v1/weapons
+
+# Detalhar arma
+curl -X GET http://localhost:3000/api/v1/weapons/<id>
+
+# Atualizar arma
+curl -X PUT http://localhost:3000/api/v1/weapons/<id> -H "Content-Type: application/json" -d '{
+  "atk": 26
+}'
+
+# Remover arma
+curl -X DELETE http://localhost:3000/api/v1/weapons/<id>
+```
+
+## 📄 Licença
+
+MIT
